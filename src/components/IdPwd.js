@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 import styled from 'styled-components';
 import Join from '../components/Join';
+import { NavLink } from 'react-router-dom';
 
 const LoginContents = styled.form`
     width: 100%;
@@ -30,11 +31,13 @@ const LoginContents = styled.form`
         cursor: pointer;
         color: #fff;
     }
-    &>p{
+    &>a{
         font-size: 13px;
         color: #4a4a4a;
         cursor: pointer;
+        display: inline-block;
         margin: 20px 0;
+        text-decoration: none;
         &:hover{
             text-decoration: underline;
         }
@@ -47,17 +50,17 @@ const IdPwd = memo(() => {
     }, [click]);
     return (
         <>
-        <LoginContents method="post" action="">
-            <div>
-                <input type="text" placeholder="아이디" name="user_id" />
-            </div>
-            <div>
-                <input type="password" id="user_pw" placeholder="비밀번호" />
-            </div>
-            <button type="submit">로그인</button>
-            <p onClick={onJoin}>관리자등록</p>
-        </LoginContents>
-        {click && <Join />}
+            <LoginContents method="post" action="">
+                <div>
+                    <input type="text" placeholder="아이디" name="user_id" />
+                </div>
+                <div>
+                    <input type="password" id="user_pw" placeholder="비밀번호" />
+                </div>
+                <button type="submit">로그인</button>
+                <NavLink to="/join" onClick={onJoin}>관리자등록</NavLink>
+            </LoginContents>
+            {click && <Join />}
         </>
     );
 });
