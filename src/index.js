@@ -9,9 +9,11 @@ import App from './App';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+    <Provider store={store}>
       <Meta />
       <BrowserRouter>
         <App />
       </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );

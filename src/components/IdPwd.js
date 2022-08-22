@@ -1,5 +1,6 @@
 import React, { memo } from 'react';
 import styled from 'styled-components';
+import { Routes, Route } from 'react-router-dom';
 import Join from '../components/Join';
 import { NavLink } from 'react-router-dom';
 
@@ -44,10 +45,6 @@ const LoginContents = styled.form`
     }
 `;
 const IdPwd = memo(() => {
-    const [click, setClick] = React.useState(false);
-    const onJoin = React.useCallback(e => {
-        setClick(!click);
-    }, [click]);
     return (
         <>
             <LoginContents method="post" action="">
@@ -55,12 +52,11 @@ const IdPwd = memo(() => {
                     <input type="text" placeholder="아이디" name="user_id" />
                 </div>
                 <div>
-                    <input type="password" id="user_pw" placeholder="비밀번호" />
+                    <input type="password" id="user_pw" placeholder="비밀번호" autoComplete="off" />
                 </div>
                 <button type="submit">로그인</button>
-                <NavLink to="/join" onClick={onJoin}>관리자등록</NavLink>
+                <NavLink to="/join" >관리자등록</NavLink>
             </LoginContents>
-            {click && <Join />}
         </>
     );
 });
