@@ -41,7 +41,7 @@ export const postLogin = createAsyncThunk("AdminSlice/postLogin", async (payload
     try{
         result = await axios.post(`${API_URL}`,{
             user_pw: payload.user_pw,
-            user_email: payload.user_id
+            user_email: payload.user_email
         });
     } catch (err){
         result = rejectWithValue(err.response);

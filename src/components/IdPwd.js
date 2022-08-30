@@ -57,7 +57,7 @@ const IdPwd = memo(() => {
         const current = e.target;
 
         try{
-            regexHelper.value(current.user_id, '아이디를 입력해주세요.');
+            regexHelper.value(current.user_email, '아이디를 입력해주세요.');
             regexHelper.value(current.user_pw, '비밀번호를 입력해주세요.');
         }catch (e) {
             window.alert(e.message);
@@ -67,7 +67,7 @@ const IdPwd = memo(() => {
         try{
             dispatch(postLogin({
                 user_pw: current.user_pw.value,
-                user_email: current.user_id.value
+                user_email: current.user_email.value
             }))
         }catch (err){
             window.alert('로그인에 실패했습니다. 아이디나 비밀번호를 확인하세요.');
@@ -79,10 +79,10 @@ const IdPwd = memo(() => {
         <>
             <LoginContents onSubmit={onSubmit}>
                 <div>
-                    <input type="text" placeholder="아이디" name="user_id" />
+                    <input type="text" placeholder="아이디" name="user_email" id="user_email"/>
                 </div>
                 <div>
-                    <input type="password" id="user_pw" placeholder="비밀번호" autoComplete="off" />
+                    <input type="password" name="user_pw" id="user_pw" placeholder="비밀번호" autoComplete="off" />
                 </div>
                 <button type="submit">로그인</button>
                 <NavLink to="/signup" >관리자등록</NavLink>
