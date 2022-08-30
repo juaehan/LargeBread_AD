@@ -1,8 +1,11 @@
 import React, { memo } from 'react';
 import styled from 'styled-components';
-import { Routes, Route } from 'react-router-dom';
-import Join from '../components/Join';
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import SignUp from './SignUp';
 import { NavLink } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { postLogin } from '../slices/AdminSlice';
+import regexHelper from '../libs/RegexHelper';
 
 const LoginContents = styled.form`
     width: 100%;
@@ -45,9 +48,36 @@ const LoginContents = styled.form`
     }
 `;
 const IdPwd = memo(() => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const {error} = useSelector((state) => state.AdminSlice);
+    const onSubmit = React.useCallback(e => {
+        e.preventDefault();
+
+        const current = e.target;
+
+        try{
+            regexHelper.value(current.user_id, '아이디를 입력해주세요.');
+            regexHelper.value(current.user_pw, '비밀번호를 입력해주세요.');
+        }catch (e) {
+            window.alert(e.message);
+            e.field.focus();
+            return;
+        }
+        try{
+            dispatch(postLogin({
+                user_pw: current.user_pw.value,
+                user_email: current.user_id.value
+            }))
+        }catch (err){
+            window.alert('로그인에 실패했습니다. 아이디나 비밀번호를 확인하세요.');
+            navigate("/admin");
+        } 
+    }, [dispatch, navigate]);
+
     return (
         <>
-            <LoginContents method="post" action="">
+            <LoginContents onSubmit={onSubmit}>
                 <div>
                     <input type="text" placeholder="아이디" name="user_id" />
                 </div>
@@ -55,7 +85,7 @@ const IdPwd = memo(() => {
                     <input type="password" id="user_pw" placeholder="비밀번호" autoComplete="off" />
                 </div>
                 <button type="submit">로그인</button>
-                <NavLink to="/join" >관리자등록</NavLink>
+                <NavLink to="/signup" >관리자등록</NavLink>
             </LoginContents>
         </>
     );

@@ -59,27 +59,25 @@ const JoinContainer = styled.div`
         }
     }
 `;
-const Join = memo(() => {
+const SignUp = memo(() => {
     const navigate = useNavigate();
 
     const dispatch = useDispatch();
-    const {loading, error} = useSelector((state) => state.AdminSlice);
-
+    const {error} = useSelector((state) => state.AdminSlice);
     const onSubmit = React.useCallback(e => {
         e.preventDefault();
 
         const current = e.target;
 
         try {
-            regexHelper.value(current.user_id, '아이디를 입력해주세요.');
-            regexHelper.engNum(current.user_id, '영문과 숫자만 입력 가능합니다.');
-            regexHelper.minLength(current.user_id, 6, '최소 6글자 이상 입력해주세요.');
-            regexHelper.maxLength(current.user_id, 15, '최대 15글자만 입력 가능합니다.');
+            regexHelper.value(current.name, '이름을 입력해주세요.');
+            regexHelper.kor(current.name, '이름은 한글만 입력 가능합니다.');
 
-            regexHelper.value(current.user_pwd, '비밀번호를 입력해주세요.');
-            regexHelper.engNum(current.user_pwd, '문자와 숫자만 입력 가능합니다.');
-            regexHelper.maxLength(current.user_pwd, 15, '최대 15글자만 입력 가능합니다.');
-            regexHelper.minLength(current.user_pwd, 6, '최소 6글자 이상 입력해주세요.');
+            regexHelper.value(current.user_pw, '비밀번호를 입력해주세요.');
+            regexHelper.value(current.confirmPw, '비밀번호를 입력해주세요.');
+            regexHelper.engNum(current.user_pw, '문자와 숫자만 입력 가능합니다.');
+            regexHelper.maxLength(current.user_pw, 15, '최대 15글자만 입력 가능합니다.');
+            regexHelper.minLength(current.user_pw, 6, '최소 6글자 이상 입력해주세요.');
 
             regexHelper.value(current.user_email, '이메일을 입력해주세요.');
         } catch (e) {
@@ -87,18 +85,21 @@ const Join = memo(() => {
             e.field.focus();
             return;
         }
-
-        dispatch(postJoin({
-            user_id: current.user_id.value,
-            user_pwd: current.user_pwd.value,
-            user_email: current.user_email.value,
-        }))
-        window.alert("회원가입이 완료되었습니다.");
-        navigate("/");
+        if(current.user_pw.value !== current.confirmPw.value){
+            window.alert("비밀번호가 일치하지 않습니다.");
+        } else {
+            dispatch(postJoin({
+                name: current.name.value,
+                user_pw: current.user_pw.value,
+                user_email: current.user_email.value,
+                confirmPw: current.confirmPw.value,
+            }))
+            window.alert("회원가입이 완료되었습니다.");
+            navigate("/");
+        }
     }, [dispatch, navigate]);
     return (
         <JoinContainer>
-            loading...
             {error ? (
                 <p>error</p>
             ) : (
@@ -106,14 +107,18 @@ const Join = memo(() => {
                     <p>Large<span>Bread</span></p>
                     <form onSubmit={onSubmit}>
                         <div>
-                            <input type="text" id="user_id" name="user_id" placeholder="아이디를 입력해주세요."/>
+                            <input type="text" id="name" name="name" placeholder="이름을 입력해주세요."/>
                         </div>
                         <div>
-                            <input type="password" id="user_pwd" name="user_pwd" placeholder="비밀번호를 입력해주세요.(문자+숫자 조합)" autoComplete="off"/>
+                            <input type="email" id="user_email" name="user_email" placeholder="사용할 이메일을 입력해주세요."/>
                         </div>
                         <div>
-                            <input type="email" id="user_email" name="user_email" placeholder="example@example.com"/>
+                            <input type="password" id="user_pw" name="user_pw" placeholder="비밀번호를 입력해주세요.(문자+숫자 조합)" autoComplete="off"/>
                         </div>
+                        <div>
+                            <input type="password" id="confirmPw" name="confirmPw" placeholder="비밀번호를 다시 한번 입력해주세요." autoComplete="off"/>
+                        </div>
+                        
                         <button type="submit" className='join'>회원가입</button>
                     </form>
                 </div>
@@ -122,4 +127,4 @@ const Join = memo(() => {
     );
 });
 
-export default Join;
+export default SignUp;

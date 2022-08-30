@@ -1,7 +1,8 @@
 import React, { memo } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import {Reset} from 'styled-reset';
-import Join from './components/Join';
+import SignUp from './components/SignUp';
+import Admin from './page/Admin';
 import Login from './page/Login';
 
 const App = memo(() => {
@@ -10,7 +11,8 @@ const App = memo(() => {
       <Reset />
       <Routes>
         <Route path="/" element={<Login />} exact={true} />
-        <Route path="/join" element={<Join />} exact={true} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/admin" element={<Admin />} />
       </Routes>
       
     </div>
