@@ -14,7 +14,7 @@ const MenuLinkContainer = styled(NavLink)`
     color: #fff;
     border-radius: 10px 10px 0 0;
     &.active{
-        background-color: #dfdfdf;
+        background-color: #f5f5f5;
         color: #000;
     }
 `;

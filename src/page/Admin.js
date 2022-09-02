@@ -18,7 +18,7 @@ const AdminContainer = styled.div`
         height: 40px;
     }
     nav{height: 60px;}
-    div{padding: 10px; background-color: #dfdfdf;}
+    div{padding: 10px; background-color: #f5f5f5;}
 `;
 
 const Admin = memo(() => {
@@ -26,13 +26,13 @@ const Admin = memo(() => {
         <AdminContainer>
             <h1>Large Bread 관리자</h1>
             <nav>
-                <MenuLink to='/product'>상품관리</MenuLink>
+                <MenuLink to='/admin/product'>상품관리</MenuLink>
                 <MenuLink to='/order_list'>주문내역</MenuLink>
             </nav>
             <div>
                 <Routes>
                     <Route path='/' element={<AdminLoading />} />
-                    <Route path='/product' element={<Product />} />
+                    <Route path='/admin/product' element={<Product />} />
                     <Route path='/order_list' element={<OrderList />} />
                 </Routes>
             </div>
