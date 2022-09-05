@@ -8,7 +8,11 @@ export const getOrderList = createAsyncThunk("OrderListSlice/getOrderList", asyn
     let result = null;
 
     try{
-        result = await axios.get(`${API_URL}admin/order_list`);
+        result = await axios.get(`${API_URL}admin/order_list`,{
+            params: {
+                query: payload?.query
+            }
+        });
     } catch (err){
         result = rejectWithValue(err.response);
     }
