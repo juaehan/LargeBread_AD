@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import Product from '../page/Product';
 import OrderList from '../page/OrderList';
 import AdminLoading from './AdminLoading';
+import ProductAdd from './ProductAdd';
+import ProductEdit from './ProductEdit';
 
 const AdminContainer = styled.div`
     height: 100%;
@@ -27,13 +29,15 @@ const Admin = memo(() => {
             <h1>Large Bread 관리자</h1>
             <nav>
                 <MenuLink to='/admin/product'>상품관리</MenuLink>
-                <MenuLink to='/order_list'>주문내역</MenuLink>
+                <MenuLink to='/admin/order_list'>주문내역</MenuLink>
             </nav>
             <div>
                 <Routes>
                     <Route path='/' element={<AdminLoading />} />
                     <Route path='/admin/product' element={<Product />} />
-                    <Route path='/order_list' element={<OrderList />} />
+                    <Route path='/admin/order_list' element={<OrderList />} />
+                    <Route path='/admin/product/product_add' element={<ProductAdd />} />
+                    <Route path='/admin/product/product_edit/:id' element={<ProductEdit />} />
                 </Routes>
             </div>
         </AdminContainer>

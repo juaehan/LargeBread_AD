@@ -3,8 +3,8 @@ import Table from '../components/Table';
 import Spinner from '../components/Spinner';
 import ErrorView from '../components/ErrorView';
 import { useSelector, useDispatch } from 'react-redux';
-import { getProductList } from '../slices/AdminProductSlice';
-import { NavLink } from 'react-router-dom';
+import { getProductList, deleteProduct } from '../slices/AdminProductSlice';
+import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 function setCategory(category){
@@ -53,12 +53,13 @@ const ProductContainer = styled.div`
     }
     .state{
         padding: 3px;
-        background: #006d00;
         color: #fff;
         border-radius: 5px;
         font-size: 10px;
         margin-left: 20px;
+        background: #006d00;
     }
+    .no{background: #ff0000;}
     button{
         border: none;
         padding: 3px 8px;
@@ -76,11 +77,34 @@ const ProductContainer = styled.div`
     
 `;
 const Product = memo(() => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const {data, loading, error} = useSelector((state) => state.AdminProductSlice);
 
     React.useEffect(() => {
         dispatch(getProductList());
+    }, [dispatch]);
+
+
+    const onEditClick = React.useCallback(e => {
+        e.preventDefault();
+
+        const current = e.target;
+        const id = current.dataset.id;
+
+        navigate(`/admin/product/product_edit/${id}`);
+    }, [navigate]);
+
+    const onDeleteClick = React.useCallback(e => {
+        e.preventDefault();
+
+        const current = e.target;
+
+        if(window.confirm(`정말 ${current.dataset.product_name}를(을) 삭제하시겠습니까?`)){
+            dispatch(deleteProduct({
+                id: current.dataset.id
+            }));
+        }
     }, [dispatch]);
     return (
         <ProductContainer>
@@ -96,22 +120,24 @@ const Product = memo(() => {
                                 <th>카테고리</th>
                                 <th>상품명</th>
                                 <th>가격</th>
+                                <th>원가</th>
                                 <th>상품 관리</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {data && data.data.item.map((v, i) => {
+                            {data.data.item.map((v, i) => {
                                 return (
                                     <tr key={i}>
                                         <td>{i+1}</td>
                                         <td><span>{setCategory(v.category_name)}</span></td>
-                                        <td>{v.product_name}<span className='state'>{setState(v.product_state)}</span></td>
+                                        <td>{v.product_name}<span className={"state " + (v.product_state==='N' ? 'no' : '')}>{setState(v.product_state)}</span></td>
                                         <td>{v.price.toLocaleString()}원</td>
+                                        <td>{v.cost.toLocaleString()}원</td>
                                         <td>
-                                            <button type="button" className="edit">
+                                            <button type="button" className="edit" data-id={v.id} onClick={onEditClick}>
                                                 수정
                                             </button>
-                                            <button type="button" className="del">
+                                            <button type="button" className="del" data-id={v.id} data-product_name={v.product_name} onClick={onDeleteClick}>
                                                 삭제
                                             </button>
                                         </td>

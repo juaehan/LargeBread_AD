@@ -15,6 +15,9 @@ const Table = styled.table`
         &:first-child{border-left: 0;}
         &:last-child{border-right: 0;}
     }
+    tr{
+        &:last-child{ border-bottom: 3px solid #ae2a2f;}
+    }
     td{
         padding: 5px;
         border: 1px solid #dcdcdc;
