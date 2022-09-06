@@ -1,28 +1,40 @@
 import React, { memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getOrderList } from '../slices/OrderListSlice';
+import {useQueryString} from '../hooks/useQueryString';
 import Table from '../components/Table';
 import Spinner from '../components/Spinner';
 import ErrorView from '../components/ErrorView';
+import { useNavigate } from 'react-router-dom';
 
 const OrderList = memo(() => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const {data, loading, error} = useSelector((state) => state.OrderListSlice);
 
-    /** 날짜 보내기 */
-    const [targetDt, setTargetDt] = React.useState('');
+    /** 날짜 얻기 */
+    // const [targetDt, setTargetDt] = React.useState();
+
+    const refDateInput = React.useRef();
+    const {query} = useQueryString({
+        query: ''
+    })
+
+    React.useEffect(() => {
+        dispatch(getOrderList({
+            query: query
+        }));
+        refDateInput.current.value = query;
+    }, [dispatch, query]);
 
     /** 날짜 변경 함수 */
     const onDateChange = React.useCallback(e => {
         e.preventDefault();
-        setTargetDt(e.target.value);
-    }, []);
+        const input = refDateInput.current;
+        navigate(`/admin/order_list?query=${input.value}`);
+    }, [navigate]);
 
-    React.useEffect(() => {
-        dispatch(getOrderList({
-            query: targetDt
-        }));
-    }, [dispatch, targetDt]);
+
 
     let amountSum = 0;
     let priceSum = 0;
@@ -37,7 +49,7 @@ const OrderList = memo(() => {
         <div>
             <Spinner visible={loading} />
             <form style={{marginBottom: "20px"}}>
-                <input type="date" name="startDate" value={targetDt} onChange={onDateChange} style={{padding: "5px", width: "130px", fontSize : "13px", border: "2px solid #fec24a"}} />
+                <input type="date" name="startDate" ref={refDateInput} onChange={onDateChange} style={{padding: "5px", width: "130px", fontSize : "13px", border: "2px solid #fec24a"}} />
             </form>
 
             {error ? <ErrorView error={error} /> : (
